@@ -1,0 +1,7 @@
+**/[Bb]in
+**/[Oo]bj
+
+.vs
+.git
+*.user
+_ReSharper*
