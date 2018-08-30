@@ -1,0 +1,41 @@
+##################################################################################################
+# Market Data service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketdata
+  labels:
+    app: marketdata
+spec:
+  ports:
+  - port: 80
+    name: http
+    targetPort: 8080
+  selector:
+    app: marketdata
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: marketdata-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: marketdata
+        version : 1
+    spec:
+      containers:
+      - name: marketdata
+        image: morganpeat/cryptotracker
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MongoDB__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              key: MongoDB__ConnectionString
+              name: ctmd-config
